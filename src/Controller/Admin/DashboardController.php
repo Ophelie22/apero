@@ -9,6 +9,7 @@ use App\Entity\Categorie;
 use App\Entity\Client;
 use App\Entity\Commande;
 use App\Entity\LigneDeCommande;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use App\Entity\Produit;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -16,16 +17,25 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 
 class DashboardController extends AbstractDashboardController
 {
     /**
+     * @IsGranted("ROLE_ADMIN")
      * @Route("dashboard", name="dashboard")
      */
     public function index(): Response
     {
         return parent::index();
+    }
+    public function adminDashboard()
+    {
+    $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+    //or add an optional message - seen by developers
+    $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'User tried to access a page without having ROLE_ADMIN');
     }
 
     public function configureDashboard(): Dashboard
